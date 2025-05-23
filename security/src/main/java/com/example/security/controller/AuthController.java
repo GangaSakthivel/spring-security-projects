@@ -6,6 +6,7 @@ import com.example.security.dto.LoginRequestDTO;
 import com.example.security.dto.UserRequestDTO;
 import com.example.security.service.UserService;
 import com.example.security.utils.ResponseMessages;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,7 +30,7 @@ public class AuthController {
 
 
     @PostMapping(value = "/register-user", consumes = {"multipart/form-data"})
-    public ResponseEntity<BaseResponseDTO<Void>> registerUser(@ModelAttribute UserRequestDTO request) {
+    public ResponseEntity<BaseResponseDTO<Void>> registerUser(@Valid @ModelAttribute UserRequestDTO request) {
         userService.registerUser(request);
         return ResponseEntity.ok(new BaseResponseDTO<>(true, ResponseMessages.SUCCESS, null));
     }
@@ -64,11 +65,5 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
     }
-
-
-
-
-
-
 
 }

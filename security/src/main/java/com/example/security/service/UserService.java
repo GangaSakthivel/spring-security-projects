@@ -36,7 +36,7 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhoneNumber());
 
-        // Encode password
+        // Encoded password
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         user.setPassword(encodedPassword);
         System.out.println("Encoded password" + encodedPassword);

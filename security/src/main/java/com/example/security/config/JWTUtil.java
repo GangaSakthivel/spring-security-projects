@@ -53,7 +53,7 @@ public class JWTUtil {
         return Jwts.parserBuilder()
                 .setSigningKey(secret)
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody()
                 .getSubject(); //username
     }
@@ -62,7 +62,7 @@ public class JWTUtil {
         String rolesString = Jwts.parserBuilder()
                 .setSigningKey(secret)
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody()
                 .get("roles", String.class);
 
@@ -71,7 +71,7 @@ public class JWTUtil {
 
     public boolean isTokenValidation(String token){
         try{
-            Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJwt(token);
+            Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJws(token);
             return true;
         }catch (JwtException | IllegalArgumentException e){
             return false;
