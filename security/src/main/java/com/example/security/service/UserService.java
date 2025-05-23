@@ -39,6 +39,7 @@ public class UserService {
         // Encode password
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         user.setPassword(encodedPassword);
+        System.out.println("Encoded password" + encodedPassword);
 
         // Convert role names (String) to Role entities
 

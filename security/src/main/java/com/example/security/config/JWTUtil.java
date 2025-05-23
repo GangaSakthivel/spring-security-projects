@@ -69,7 +69,7 @@ public class JWTUtil {
         return Set.of(rolesString);
     }
 
-    public boolean tokenValidation(String token){
+    public boolean isTokenValidation(String token){
         try{
             Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJwt(token);
             return true;
