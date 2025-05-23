@@ -41,4 +41,7 @@ public class ResponseMessages {
     public static final ResponseError JOINED_ALREADY_RESPONSE = new ResponseError(200, "Already Joined");
 
     public static final ResponseError ACCESS_DENIED = new ResponseError(403, "Access Denied");
+
+    public static final String UPDATE_SUCCESS_MSG = "User updated successfully!";
+
 }

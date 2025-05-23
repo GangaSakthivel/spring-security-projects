@@ -3,13 +3,10 @@ package com.example.security.config;
 import com.example.security.model.Role;
 import com.example.security.model.User;
 import com.example.security.repository.UserRepository;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
-
-
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -42,7 +39,7 @@ public class JWTUtil {
         return Jwts.builder()
                 .setSubject(phoneNumber)
                 .claim("roles", roles.stream()
-                        .map(role -> role.getName())
+                        .map(role -> "ROLE_" + role.getName())//added "ROLE_"
                         .collect(Collectors.joining(",")))
                 .setIssuedAt(new Date(new Date().getTime() + jwtExpiration))
                 .signWith(SignatureAlgorithm.HS256, secret)
