@@ -31,20 +31,25 @@ public class JWTUtil {
         this.userRepository = userRepository;
     }
 
+
     public String generateToken(String phoneNumber) {
         Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
         Set<Role> roles = user.get().getRoles();
 
-        // add roles to the token
+        Date now = new Date();
         return Jwts.builder()
                 .setSubject(phoneNumber)
                 .claim("roles", roles.stream()
-                        .map(role -> "ROLE_" + role.getName())//added "ROLE_"
+                        .map(role -> "ROLE_" + role.getName())
                         .collect(Collectors.joining(",")))
-                .setIssuedAt(new Date(new Date().getTime() + jwtExpiration))
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + jwtExpiration))
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
+
     }
+
+
 
     public String extractUserName(String token){
         return Jwts.parserBuilder()

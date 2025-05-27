@@ -23,11 +23,10 @@ public class UserController {
     private final JWTUtil jwtUtil;
     private final UserService userService;
 
-
     @Value("${role.admin}")
     private String roleAdmin;
 
-    @Value("${role.user")
+    @Value("${role.user}")
     private String roleUser;
 
     public UserController(JWTUtil jwtUtil, UserService userService) {
@@ -36,9 +35,10 @@ public class UserController {
     }
 
 
-    @PostMapping(value = "/add-user", consumes = {"multipart/form-data"})
+    //@PostMapping(value = "/add-user", consumes = {"multipart/form-data"})
+    @PostMapping("/add-user")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<BaseResponseDTO<Void>> addUser(@Valid @ModelAttribute UserRequestDTO request) {
+    public ResponseEntity<BaseResponseDTO<Void>> addUser(@RequestBody UserRequestDTO request) {
         try {
             userService.addUser(request);
             return ResponseEntity.ok(new BaseResponseDTO<>(true, ResponseMessages.SUCCESS, null));
@@ -54,10 +54,9 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")  // restrict access to admins only
     public ResponseEntity<BaseResponseDTO<List<User>>> getAllUser() {
         try {
-            List<User> users = userService.getAllUsers();  // make sure you have this method in service
+            List<User> users = userService.getAllUsers();
             return ResponseEntity.ok(new BaseResponseDTO<>(true, ResponseMessages.SUCCESS, users));
         } catch (Exception e) {
-            // Log error (optional)
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new BaseResponseDTO<>(false, "Failed to fetch users", null));
         }

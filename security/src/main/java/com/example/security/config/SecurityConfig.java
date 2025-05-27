@@ -2,6 +2,7 @@ package com.example.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,16 +27,34 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll() //without authenticated users can access this endpoint
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasRole("USER")
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-
     }
+
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+//        return httpSecurity.csrf(csrf -> csrf.disable())
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/auth/**").permitAll() //without authentication, users can access this endpoint
+//                        //.requestMatchers("/admin/**").hasRole("ADMIN")
+//                        //.requestMatchers("/api/users/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST, "/api/users/**").hasRole("ADMIN")//
+//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+//                        //.requestMatchers("/user/**").hasRole("USER")
+//                        .anyRequest()
+//                        .authenticated())
+//                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+//                .build();
+//
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){

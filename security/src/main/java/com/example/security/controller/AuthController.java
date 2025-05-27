@@ -29,8 +29,9 @@ public class AuthController {
     }
 
 
-    @PostMapping(value = "/register-user", consumes = {"multipart/form-data"})
-    public ResponseEntity<BaseResponseDTO<Void>> registerUser(@Valid @ModelAttribute UserRequestDTO request) {
+    @PostMapping("/register-user")
+    //@PostMapping(value = "/register-user", consumes = {"multipart/form-data"})
+    public ResponseEntity<BaseResponseDTO<Void>> registerUser(@Valid @RequestBody UserRequestDTO request) {
         userService.registerUser(request);
         return ResponseEntity.ok(new BaseResponseDTO<>(true, ResponseMessages.SUCCESS, null));
     }
