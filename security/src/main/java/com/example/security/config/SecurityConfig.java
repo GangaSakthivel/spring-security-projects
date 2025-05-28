@@ -24,37 +24,37 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/users/**").hasRole("ADMIN")
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest()
-                        .authenticated())
-                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }
-
 //    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 //        return httpSecurity.csrf(csrf -> csrf.disable())
 //                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/auth/**").permitAll() //without authentication, users can access this endpoint
-//                        //.requestMatchers("/admin/**").hasRole("ADMIN")
-//                        //.requestMatchers("/api/users/**").hasRole("ADMIN")
-//                        .requestMatchers(HttpMethod.POST, "/api/users/**").hasRole("ADMIN")//
+//                        .requestMatchers("/auth/**").permitAll()
+//                       // .requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST, "/api/add-user").hasRole("ADMIN")
 //                        .requestMatchers("/admin/**").hasRole("ADMIN")
-//                        //.requestMatchers("/user/**").hasRole("USER")
 //                        .anyRequest()
 //                        .authenticated())
 //                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 //                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 //                .build();
-//
 //    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/add-user").hasRole("ADMIN")// Specific rule for add-user
+                        .requestMatchers(HttpMethod.GET,"/api/getAllUsers").hasRole("ADMIN")
+                        .requestMatchers("/api/**").hasRole("ADMIN")
+                        //.requestMatchers("/api/**").hasRole("USER") // Allow access to /user/** for users with ROLE_USER
+                        .anyRequest().authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
+    }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){

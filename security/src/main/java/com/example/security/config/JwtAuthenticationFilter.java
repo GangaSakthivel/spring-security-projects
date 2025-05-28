@@ -46,12 +46,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (jwtUtil.isTokenValidation(token)) {
                     Set<String> roles = jwtUtil.extractRoles(token);
 
+
 //                    Set<GrantedAuthority> authorities = roles.stream()
-//                            .map(SimpleGrantedAuthority::new)
+//                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) //ROLE_ADMIN, ROLE_USER
 //                            .collect(Collectors.toSet());
 
                     Set<GrantedAuthority> authorities = roles.stream()
-                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) //ROLE_ADMIN, ROLE_USER
+                            .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toSet());
 
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

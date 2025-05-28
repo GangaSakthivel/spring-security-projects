@@ -69,11 +69,11 @@ public class UserController {
         return ResponseEntity.ok(new BaseResponseDTO<>(true, ResponseMessages.SUCCESS, user));
     }
 
-    @PutMapping(value = "/user/{id}", consumes = {"multipart/form-data"})
+    @PutMapping("/user/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BaseResponseDTO<Void>> updateUser(
             @PathVariable Long id,
-            @Valid @ModelAttribute UserRequestDTO request) {
+            @Valid @RequestBody UserRequestDTO request) {
         userService.updateUser(id, request);
         return ResponseEntity.ok(new BaseResponseDTO<>(true, ResponseMessages.UPDATE_SUCCESS_MSG, null));
     }
