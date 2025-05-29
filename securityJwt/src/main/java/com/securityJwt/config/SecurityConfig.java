@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final UserRepository userRepository;
-    private final JwtService jwtService;  // You'll need to inject JwtService here
+    private final JwtService jwtService;  //need to inject JwtService here
 
     public SecurityConfig(UserRepository userRepository, JwtService jwtService) {
         this.userRepository = userRepository;
@@ -54,9 +54,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**")
+                        .requestMatchers("/api/v1/auth/**")//no authentication required , Match anything that comes after /api/v1/auth/ — even multiple path segments
                         .permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/v1/user-controller/admin-data").hasRole("ADMIN") // Only admins
+                        .anyRequest().authenticated() //end points other than mentioned should be authenticated with the token
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
