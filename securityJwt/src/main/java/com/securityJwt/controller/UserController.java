@@ -11,14 +11,16 @@ public class UserController {
 
     @GetMapping
     public String Hello(){
-        return "Hello this is secured end point.";
+        return "Secured end point.";
     }
 
-    @GetMapping("admin-data")
-    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("user-data")
+    @PreAuthorize("hasRole('USER')")
     public String adminAuthenticated(){
-        return "someone with the Admin token can access this";
+        return "someone with the user token can access this";
     }
+
+
 
 
 
