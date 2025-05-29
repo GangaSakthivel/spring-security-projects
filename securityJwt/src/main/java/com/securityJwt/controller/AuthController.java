@@ -4,6 +4,7 @@ import com.securityJwt.dto.AuthRequest;
 import com.securityJwt.dto.AuthResponse;
 import com.securityJwt.dto.RegisterRequest;
 import com.securityJwt.service.AuthenticationService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         AuthResponse response = authenticationService.register(request);
         return ResponseEntity.ok(response);
     }

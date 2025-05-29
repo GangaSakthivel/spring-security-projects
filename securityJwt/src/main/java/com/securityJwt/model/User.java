@@ -24,9 +24,9 @@ public class User implements UserDetails {
     private Integer id;
     private String firstName;
     private String lastName;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String password;
 
     @Enumerated(EnumType.STRING)
