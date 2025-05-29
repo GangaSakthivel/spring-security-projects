@@ -22,6 +22,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    //register
     public AuthResponse register(RegisterRequest registerRequest) {
         var user = User.builder()
                 .firstName(registerRequest.getFirstName())
@@ -39,6 +40,8 @@ public class AuthenticationService {
                 .build();
     }
 
+
+    //authenticate
     public AuthResponse authenticate(AuthRequest authRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

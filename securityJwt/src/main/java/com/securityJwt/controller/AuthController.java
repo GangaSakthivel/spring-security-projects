@@ -36,11 +36,12 @@ public class AuthController {
 //    }
 
 
-    @PostMapping("/authenticate") // Corrected endpoint path
-    public ResponseEntity<String> register(@RequestBody AuthRequest authRequest){ // Method name remains 'register'
-        authenticationService.authenticate(authRequest);
-        return ResponseEntity.ok("Registration successful"); // Corrected return type and value
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthRequest authRequest) {
+        AuthResponse response = authenticationService.authenticate(authRequest); // Note: method name 'register' is confusing here
+        return ResponseEntity.ok(response);
     }
+
 
 
 }
