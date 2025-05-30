@@ -23,7 +23,6 @@ public class AdminController {
         return "Admin can access this end point.";
     }
 
-
     @PostMapping("/add-user")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AuthResponse> addUser(@Valid @RequestBody RegisterRequest request) {
