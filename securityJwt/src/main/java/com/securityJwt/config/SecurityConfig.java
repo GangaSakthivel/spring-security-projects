@@ -53,10 +53,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/user-controller/**").hasRole("USER")
-                        .requestMatchers("/api/v1/admin-controller/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/v1/auth/**").permitAll() //can access without authentication
+                        .requestMatchers("/api/v1/user-controller/**").hasRole("USER") //authenticated users with the USER_ROLE
+                        .requestMatchers("/api/v1/admin-controller/**").hasRole("ADMIN")//authenticated users with the ADMIN_ROLE
+                        .anyRequest().authenticated() //anything other than the above one should be authenticated
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
