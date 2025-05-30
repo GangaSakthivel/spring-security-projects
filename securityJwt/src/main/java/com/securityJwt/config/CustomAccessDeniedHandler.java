@@ -1,4 +1,4 @@
-package com.securityJwt.config; // Or your configuration package
+package com.securityJwt.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.securityJwt.dto.BaseResponseDTO;
