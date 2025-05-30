@@ -26,25 +26,6 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-//    //register
-//    public AuthResponse register(RegisterRequest registerRequest) {
-//        var user = User.builder()
-//                .firstName(registerRequest.getFirstName())
-//                .lastName(registerRequest.getLastName())
-//                .email(registerRequest.getEmail())
-//                .password(passwordEncoder.encode(registerRequest.getPassword()))
-//                .role(ROLE_USER)
-//                //.role(Role.ADMIN)
-//                .build();
-//
-//        userRepository.save(user);
-//
-//        var jwtToken = jwtService.generateToken(user);
-//        return AuthResponse.builder()
-//                .token(jwtToken)
-//                .build();
-//    }
-
     //register
     public AuthResponse register(RegisterRequest registerRequest) {
         Set<Role> userRoles = new HashSet<>();
@@ -97,4 +78,6 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
+
+
 }

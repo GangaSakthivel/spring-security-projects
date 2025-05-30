@@ -56,7 +56,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**")//no authentication required , Match anything that comes after /api/v1/auth/ — even multiple path segments
                         .permitAll()
-                        .requestMatchers("/api/v1/user-controller/user-data").hasRole("USER") // Only users
+                        .requestMatchers("/api/v1/user-controller/**").hasRole("USER") // Only users
+                        .requestMatchers("/api/v1/admin-controller/**").hasRole("ADMIN") // Only admins can access
                         .anyRequest().authenticated() //end points other than mentioned should be authenticated with the token
                 )
                 .sessionManagement(session -> session
