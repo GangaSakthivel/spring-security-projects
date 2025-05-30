@@ -8,6 +8,8 @@ public class ResponseMessages {
 
     public static final String INVALID_REQUEST = "Invalid request";
 
+    public static final String NOT_FOUND = "Resource not found";
+
     public static final ResponseError SUCCESS_RESPONSE = new ResponseError(200, "Success");
 
     public static final ResponseError CREATED_RESPONSE = new ResponseError(201, "Created Successfully");

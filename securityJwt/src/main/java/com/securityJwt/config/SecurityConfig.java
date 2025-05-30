@@ -2,6 +2,7 @@ package com.securityJwt.config;
 
 import com.securityJwt.repository.UserRepository;
 import com.securityJwt.service.JwtService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,15 +19,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;  //need to inject JwtService here
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
-    public SecurityConfig(UserRepository userRepository, JwtService jwtService) {
-        this.userRepository = userRepository;
-        this.jwtService = jwtService;
-    }
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -54,17 +53,19 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**")//no authentication required , Match anything that comes after /api/v1/auth/ — even multiple path segments
-                        .permitAll()
-                        .requestMatchers("/api/v1/user-controller/**").hasRole("USER") // Only users
-                        .requestMatchers("/api/v1/admin-controller/**").hasRole("ADMIN") // Only admins can access
-                        .anyRequest().authenticated() //end points other than mentioned should be authenticated with the token
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/user-controller/**").hasRole("USER")
+                        .requestMatchers("/api/v1/admin-controller/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .userDetailsService(userDetailsService())
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling.accessDeniedHandler(accessDeniedHandler)
+                );
 
         return http.build();
     }
