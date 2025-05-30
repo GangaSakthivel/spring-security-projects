@@ -56,6 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll() //can access without authentication
                         .requestMatchers("/api/v1/user-controller/**").hasRole("USER") //authenticated users with the USER_ROLE
                         .requestMatchers("/api/v1/admin-controller/**").hasRole("ADMIN")//authenticated users with the ADMIN_ROLE
+                        .requestMatchers("/api/v1/shared/**").hasAnyRole("USER", "ADMIN")//admin and user can access this end point with the valid token
                         .anyRequest().authenticated() //anything other than the above one should be authenticated
                 )
                 .sessionManagement(session -> session
