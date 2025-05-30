@@ -9,19 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/user-controller")
 public class UserController {
 
-    @GetMapping
+    @GetMapping //any user with the valid token
     public String Hello(){
         return "Secured end point.";
     }
 
-    @GetMapping("user-data")
+    //Access to this endpoint is restricted based on the role of the authenticated user.
+
+    @GetMapping("user-data") //only user with the user name USER can access this end point
     @PreAuthorize("hasRole('USER')")
     public String adminAuthenticated(){
         return "someone with the user token can access this";
     }
-
-
-
 
 
 }

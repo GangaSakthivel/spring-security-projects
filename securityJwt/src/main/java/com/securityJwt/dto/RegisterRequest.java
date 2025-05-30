@@ -3,6 +3,8 @@ package com.securityJwt.dto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,4 +19,6 @@ public class RegisterRequest {
     private String email;
     @NotBlank
     private String password;
+
+    private Set<String> roles;
 }
