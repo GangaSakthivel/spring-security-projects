@@ -2,9 +2,12 @@ package com.securityJwt.controller;
 
 import com.securityJwt.dto.AuthRequest;
 import com.securityJwt.dto.AuthResponse;
+import com.securityJwt.dto.BaseResponseDTO;
 import com.securityJwt.dto.RegisterRequest;
 import com.securityJwt.service.AuthenticationService;
+import com.securityJwt.utils.ResponseMessages;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,16 +26,28 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
-        AuthResponse response = authenticationService.register(request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<BaseResponseDTO<String>> register(@Valid @RequestBody RegisterRequest request) {
+        try {
+            authenticationService.register(request);
+            return ResponseEntity.ok(new BaseResponseDTO<>(true, ResponseMessages.SUCCESS, "User Registered"));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new BaseResponseDTO<>(false, e.getMessage(), null));
+        }
     }
 
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthRequest authRequest) {
-        AuthResponse response = authenticationService.authenticate(authRequest); // Note: method name 'register' is confusing here
-        return ResponseEntity.ok(response);
+    public ResponseEntity<BaseResponseDTO<AuthResponse>> authenticate(@RequestBody AuthRequest authRequest) {
+        try {
+            AuthResponse response = authenticationService.authenticate(authRequest);
+            return ResponseEntity.ok(new BaseResponseDTO<>(true, ResponseMessages.SUCCESS, response));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new BaseResponseDTO<>(false, e.getMessage(), null));
+        }
     }
 
 

@@ -27,10 +27,10 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     //register
-    public AuthResponse register(RegisterRequest registerRequest) {
+    public void register(RegisterRequest request) { // Changed return type to void
         Set<Role> userRoles = new HashSet<>();
-        if (registerRequest.getRoles() != null && !registerRequest.getRoles().isEmpty()) {
-            for (String roleName : registerRequest.getRoles()) {
+        if (request.getRoles() != null && !request.getRoles().isEmpty()) {
+            for (String roleName : request.getRoles()) {
                 try {
                     userRoles.add(Role.valueOf(roleName.toUpperCase()));
                 } catch (IllegalArgumentException e) {
@@ -42,22 +42,16 @@ public class AuthenticationService {
         }
 
         var user = User.builder()
-                .firstName(registerRequest.getFirstName())
-                .lastName(registerRequest.getLastName())
-                .email(registerRequest.getEmail())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .roles(userRoles)
                 .build();
 
         userRepository.save(user);
 
-        // Explicitly fetch the user to ensure roles are loaded
-        User savedUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("User not found after save"));
-
-        var jwtToken = jwtService.generateToken(savedUser);
-        return AuthResponse.builder()
-                .token(jwtToken)
-                .build();
+        // Token generation is removed here
     }
 
 
@@ -78,6 +72,4 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
-
-
 }
