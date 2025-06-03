@@ -1,6 +1,7 @@
 package com.example.OrderManagementSystem.service;
 
 import com.example.OrderManagementSystem.enums.Role;
+import com.example.OrderManagementSystem.model.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +20,7 @@ public class AppUserDetails implements UserDetails {
     private final String password;
     private final Set<Role> roles;
 
-    public AppUserDetails(com.example.OrderManagementSystem.model.User user) {
+    public AppUserDetails(User user) {
         this.phoneNumber = user.getPhoneNumber();
         this.password = user.getPassword();
         this.roles = user.getRoles();
