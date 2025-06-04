@@ -24,16 +24,9 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-
-        BaseResponseDTO<Void> errorResponse = new BaseResponseDTO<>(
-                false,
-                "Access denied. You do not have the necessary permissions.",
-                null
-        );
-
+        BaseResponseDTO<Void> errorResponse = new BaseResponseDTO<>(false, "Access Denied: You do not have sufficient permissions to access this resource.", null);
         OutputStream responseStream = response.getOutputStream();
         objectMapper.writeValue(responseStream, errorResponse);
         responseStream.flush();
     }
-
 }

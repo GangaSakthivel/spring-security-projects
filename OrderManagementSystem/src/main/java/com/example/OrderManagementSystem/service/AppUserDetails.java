@@ -3,17 +3,15 @@ package com.example.OrderManagementSystem.service;
 import com.example.OrderManagementSystem.enums.Role;
 import com.example.OrderManagementSystem.model.User;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Getter
-@RequiredArgsConstructor
 public class AppUserDetails implements UserDetails {
 
     private final String phoneNumber;
@@ -23,7 +21,7 @@ public class AppUserDetails implements UserDetails {
     public AppUserDetails(User user) {
         this.phoneNumber = user.getPhoneNumber();
         this.password = user.getPassword();
-        this.roles = user.getRoles();
+        this.roles = new HashSet<>(user.getRoles());
     }
 
     @Override
@@ -56,5 +54,18 @@ public class AppUserDetails implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
     }
 }

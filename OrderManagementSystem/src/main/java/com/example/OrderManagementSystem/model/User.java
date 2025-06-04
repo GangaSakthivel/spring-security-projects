@@ -36,6 +36,20 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+
+    public User(Integer id, String firstName, String lastName, String email, String phoneNumber, String password, Set<Role> roles) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public User() {
+    }
+
     public Integer getId() {
         return id;
     }
@@ -92,3 +106,4 @@ public class User {
         this.roles = roles;
     }
 }
+

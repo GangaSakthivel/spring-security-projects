@@ -10,7 +10,6 @@ public class ErrorResponse {
     private String message;
 
     public ErrorResponse() {
-        // no-arg constructor for serialization/deserialization
     }
 
     public ErrorResponse(int status, String message) {
