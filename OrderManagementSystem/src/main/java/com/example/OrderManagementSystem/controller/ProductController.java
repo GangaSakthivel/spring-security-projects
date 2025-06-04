@@ -20,12 +20,10 @@ public class ProductController {
 
     private final ProductService productService;
 
-    // Constructor Injection
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
-    // CREATE
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BaseResponseDTO<Product>> createProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO) {

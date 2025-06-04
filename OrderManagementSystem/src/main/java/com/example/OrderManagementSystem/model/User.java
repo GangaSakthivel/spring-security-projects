@@ -2,21 +2,17 @@ package com.example.OrderManagementSystem.model;
 
 import com.example.OrderManagementSystem.enums.Role;
 import jakarta.persistence.*;
-import lombok.*;
 
 import java.util.Set;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -37,7 +33,7 @@ public class User {
     private Set<Role> roles;
 
 
-    public User(Integer id, String firstName, String lastName, String email, String phoneNumber, String password, Set<Role> roles) {
+    public User(Long id, String firstName, String lastName, String email, String phoneNumber, String password, Set<Role> roles) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -50,11 +46,11 @@ public class User {
     public User() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -36,7 +36,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<BaseResponseDTO<AuthResponse>> authenticate(@RequestBody AuthRequest authRequest) {
         try {
             AuthResponse response = authenticationService.authenticate(authRequest);

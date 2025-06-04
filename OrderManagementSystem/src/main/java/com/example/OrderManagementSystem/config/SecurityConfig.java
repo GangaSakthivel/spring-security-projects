@@ -1,7 +1,6 @@
 package com.example.OrderManagementSystem.config;
 
 import com.example.OrderManagementSystem.repository.UserRepository;
-import com.example.OrderManagementSystem.service.AppUserDetails;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,9 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -47,18 +43,20 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/product-controller/**").hasAnyRole("ADMIN", "CUSTOMER")
+
                         .requestMatchers(HttpMethod.POST, "/api/product-controller/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/product-controller/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/product-controller/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/product-controller/**").hasAnyRole("ADMIN", "CUSTOMER")
-
+                        .requestMatchers(HttpMethod.POST, "/api/order-controller").hasRole("CUSTOMER")
+                        .requestMatchers(HttpMethod.GET, "/api/order-controller").hasAnyRole("ADMIN", "CUSTOMER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                // Use the injected filter here
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // <-- Use the injected filter
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception.accessDeniedHandler(accessDeniedHandler));
 
         return http.build();

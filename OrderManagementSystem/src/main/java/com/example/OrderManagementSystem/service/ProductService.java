@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.math.RoundingMode;
 
 @Service
 public class ProductService {
@@ -26,11 +27,13 @@ public class ProductService {
         product.setQuantity(dto.getQuantity());
         product.setCount(dto.getCount());
 
-        BigDecimal avgWeight = dto.getQuantity()
-                .divide(BigDecimal.valueOf(dto.getCount()))
-                .setScale(2, BigDecimal.ROUND_HALF_UP);
-
-
+        if (dto.getCount() != null && dto.getCount() > 0 && dto.getQuantity() != null) {
+            BigDecimal averageWeight = dto.getQuantity()
+                    .divide(BigDecimal.valueOf(dto.getCount()), 2, RoundingMode.HALF_UP);
+            product.setAverageWeight(averageWeight);
+        } else {
+            product.setAverageWeight(BigDecimal.ZERO);
+        }
 
         return productRepository.save(product);
     }
@@ -53,10 +56,13 @@ public class ProductService {
         existingProduct.setQuantity(dto.getQuantity());
         existingProduct.setCount(dto.getCount());
 
-        BigDecimal avgWeight = dto.getQuantity()
-                .divide(BigDecimal.valueOf(dto.getCount()))
-                .setScale(2, BigDecimal.ROUND_HALF_UP);
-
+        if (dto.getCount() != null && dto.getCount() > 0 && dto.getQuantity() != null) {
+            BigDecimal averageWeight = dto.getQuantity()
+                    .divide(BigDecimal.valueOf(dto.getCount()), 2, RoundingMode.HALF_UP);
+            existingProduct.setAverageWeight(averageWeight);
+        } else {
+            existingProduct.setAverageWeight(BigDecimal.ZERO);
+        }
 
         return productRepository.save(existingProduct);
     }
