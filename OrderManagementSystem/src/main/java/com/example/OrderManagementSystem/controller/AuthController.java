@@ -28,11 +28,11 @@ public class AuthController {
     public ResponseEntity<BaseResponseDTO<String>> register(@Valid @RequestBody UserRequestDTO request) {
         try {
             authenticationService.register(request);
-            return ResponseEntity.ok(new BaseResponseDTO<>(true, ResponseMessages.SUCCESS, "User Registered"));
+            return ResponseEntity.ok(new BaseResponseDTO<>(true, ResponseMessages.SUCCESS, "User Registered."));
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new BaseResponseDTO<>(false, e.getMessage(), null));
+                    .body(new BaseResponseDTO<>(false, e.getMessage(), e.getMessage()));
         }
     }
 

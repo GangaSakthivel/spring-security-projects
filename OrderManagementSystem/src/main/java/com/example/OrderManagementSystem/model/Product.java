@@ -4,13 +4,10 @@ package com.example.OrderManagementSystem.model;
 import com.example.OrderManagementSystem.enums.BirdSize;
 import com.example.OrderManagementSystem.enums.ProductName;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
+
 @Entity
 @Table(name = "products")
 public class Product {

@@ -1,12 +1,9 @@
 package com.example.OrderManagementSystem.dto;
 
-import lombok.Data;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
 public class OrderCreateRequest {
     private String saleOrderId;
     private LocalDateTime orderDateTime;

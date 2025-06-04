@@ -1,10 +1,8 @@
 package com.example.OrderManagementSystem.dto;
 
-import lombok.Data;
-
 import java.math.BigDecimal;
 
-@Data
+
 public class OrderItemCreateDTO {
     private Long productId;
     private BigDecimal quantityKg;
@@ -13,6 +11,7 @@ public class OrderItemCreateDTO {
         this.productId = productId;
         this.quantityKg = quantityKg;
     }
+
 
     public OrderItemCreateDTO() {
     }
@@ -32,4 +31,6 @@ public class OrderItemCreateDTO {
     public void setQuantityKg(BigDecimal quantityKg) {
         this.quantityKg = quantityKg;
     }
+
+
 }

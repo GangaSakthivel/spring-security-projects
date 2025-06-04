@@ -1,9 +1,8 @@
 package com.example.OrderManagementSystem.controller;
 
-
 import com.example.OrderManagementSystem.dto.BaseResponseDTO;
 import com.example.OrderManagementSystem.dto.OrderCreateRequest;
-import com.example.OrderManagementSystem.model.Order;
+import com.example.OrderManagementSystem.dto.OrderResponseDTO;
 import com.example.OrderManagementSystem.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +21,9 @@ public class OrderController {
 
     @PostMapping
     @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<BaseResponseDTO<Order>> createOrder(@RequestBody OrderCreateRequest request) {
+    public ResponseEntity<BaseResponseDTO<OrderResponseDTO>> createOrder(@RequestBody OrderCreateRequest request) {
         try {
-            Order createdOrder = orderService.createOrder(request);
+            OrderResponseDTO createdOrder = orderService.createOrder(request);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(new BaseResponseDTO<>(true, "Order created successfully", createdOrder));
@@ -37,9 +36,9 @@ public class OrderController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
-    public ResponseEntity<BaseResponseDTO<Order>> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<BaseResponseDTO<OrderResponseDTO>> getOrderById(@PathVariable Long id) {
         try {
-            Order order = orderService.getOrderById(id);
+            OrderResponseDTO order = orderService.getOrderById(id);
             return ResponseEntity.ok(new BaseResponseDTO<>(true, "Order retrieved successfully", order));
         } catch (Exception e) {
             return ResponseEntity
@@ -50,9 +49,9 @@ public class OrderController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<BaseResponseDTO<Order>> updateOrder(@PathVariable Long id, @RequestBody OrderCreateRequest request) {
+    public ResponseEntity<BaseResponseDTO<OrderResponseDTO>> updateOrder(@PathVariable Long id, @RequestBody OrderCreateRequest request) {
         try {
-            Order updatedOrder = orderService.updateOrder(id, request);
+            OrderResponseDTO updatedOrder = orderService.updateOrder(id, request);
             return ResponseEntity.ok(new BaseResponseDTO<>(true, "Order updated successfully", updatedOrder));
         } catch (Exception e) {
             return ResponseEntity

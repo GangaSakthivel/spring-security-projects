@@ -1,14 +1,8 @@
 package com.example.OrderManagementSystem.service;
 
-import com.example.OrderManagementSystem.dto.OrderCreateRequest;
-import com.example.OrderManagementSystem.dto.OrderItemCreateDTO;
-import com.example.OrderManagementSystem.model.Order;
-import com.example.OrderManagementSystem.model.OrderItem;
-import com.example.OrderManagementSystem.model.Product;
-import com.example.OrderManagementSystem.model.User;
-import com.example.OrderManagementSystem.repository.OrderRepository;
-import com.example.OrderManagementSystem.repository.ProductRepository;
-import com.example.OrderManagementSystem.repository.UserRepository;
+import com.example.OrderManagementSystem.dto.*;
+import com.example.OrderManagementSystem.model.*;
+import com.example.OrderManagementSystem.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +23,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrder(OrderCreateRequest request) {
+    public OrderResponseDTO createOrder(OrderCreateRequest request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + request.getUserId()));
 
@@ -55,16 +49,18 @@ public class OrderService {
 
         order.setOrderItems(orderItems);
 
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        return mapToOrderResponse(savedOrder);
     }
 
-    public Order getOrderById(Long id) {
-        return orderRepository.findById(id)
+    public OrderResponseDTO getOrderById(Long id) {
+        Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with ID: " + id));
+        return mapToOrderResponse(order);
     }
 
     @Transactional
-    public Order updateOrder(Long id, OrderCreateRequest request) {
+    public OrderResponseDTO updateOrder(Long id, OrderCreateRequest request) {
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with ID: " + id));
 
@@ -73,14 +69,13 @@ public class OrderService {
         existingOrder.setDeliveryDate(request.getDeliveryDate());
         existingOrder.setOrderStatus(request.getOrderStatus());
 
-        // Optionally update user if needed (or keep unchanged)
         if (!existingOrder.getUser().getId().equals(request.getUserId())) {
             User user = userRepository.findById(request.getUserId())
                     .orElseThrow(() -> new RuntimeException("User not found with ID: " + request.getUserId()));
             existingOrder.setUser(user);
         }
 
-        // Update order items: clear existing and add new
+        // Clear existing items and add new ones
         existingOrder.getOrderItems().clear();
 
         List<OrderItem> updatedItems = new ArrayList<>();
@@ -97,12 +92,45 @@ public class OrderService {
         }
         existingOrder.getOrderItems().addAll(updatedItems);
 
-        return orderRepository.save(existingOrder);
+        Order savedOrder = orderRepository.save(existingOrder);
+        return mapToOrderResponse(savedOrder);
     }
 
     public void deleteOrder(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with ID: " + id));
         orderRepository.delete(order);
+    }
+
+    private OrderResponseDTO mapToOrderResponse(Order order) {
+        OrderResponseDTO dto = new OrderResponseDTO();
+
+        dto.setOrderId(order.getOrderId());
+        dto.setSaleOrderId(order.getSaleOrderId());
+        dto.setOrderDateTime(order.getOrderDateTime());
+        dto.setDeliveryDate(order.getDeliveryDate());
+        dto.setOrderStatus(order.getOrderStatus());
+        dto.setCreatedAt(order.getCreatedAt());
+        dto.setUpdatedAt(order.getUpdatedAt());
+
+        User user = order.getUser();
+        UserResponseDTO userDto = new UserResponseDTO();
+        userDto.setId(user.getId());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setPhoneNumber(user.getPhoneNumber());
+        dto.setUser(userDto);
+
+        List<OrderItemResponseDTO> itemsDto = order.getOrderItems().stream().map(item -> {
+            OrderItemResponseDTO itemDto = new OrderItemResponseDTO();
+            itemDto.setProductId(item.getProduct().getProductId());
+            itemDto.setProductName(item.getProduct().getProductName());
+            itemDto.setQuantityKg(item.getQuantityKg());
+            return itemDto;
+        }).toList();
+
+        dto.setOrderItems(itemsDto);
+
+        return dto;
     }
 }
