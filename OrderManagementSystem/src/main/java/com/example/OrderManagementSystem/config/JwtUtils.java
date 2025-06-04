@@ -70,12 +70,10 @@ public class JwtUtils  {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ){
-        // Extract roles from UserDetails
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        // Add the roles to the extraClaims map
         extraClaims.put("roles", roles);
 
         return Jwts
